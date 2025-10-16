@@ -1,0 +1,108 @@
+.item-card-link {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .item-card {
+    background-color: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .item-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  
+  .item-card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .item-card-content {
+    padding: 15px;
+  }
+  
+  .item-card-category {
+    font-size: 12px;
+    color: var(--dark-gray);
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  
+  .item-card-title {
+    font-size: 18px;
+    margin: 5px 0;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .item-card-location {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 15px;
+  }
+  
+  .item-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border-color);
+    padding-top: 10px;
+  }
+  
+  .item-card-price {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary-green);
+  }
+  
+  .item-card-type {
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    color: var(--white);
+  }
+  
+  .type-sell { background-color: #3f51b5; }
+  .type-rent { background-color: #f57c00; }
+  .type-borrow { background-color: #2e7d32; }
+
+
+/* Add these new styles to frontend/src/components/ItemCard.css */
+
+.item-card {
+  /* This is crucial for the absolute positioning of the overlay */
+  position: relative; 
+}
+
+.item-card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent white */
+  z-index: 10; /* Ensure it's on top of other content */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* backdrop-filter: blur(2px);  */
+}
+
+.overlay-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--dark-gray);
+  padding: 10px 20px;
+  border: 2px solid var(--dark-gray);
+  border-radius: 5px;
+  text-transform: uppercase;
+}

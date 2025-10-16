@@ -1,0 +1,172 @@
+/* In frontend/src/pages/ProfilePage.css */
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  background-color: var(--white);
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+}
+
+.profile-picture {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--primary-green);
+}
+
+.profile-info h1 {
+  margin: 0 0 10px;
+  font-size: 2.5rem;
+  color: var(--primary-green);
+}
+
+.profile-info p {
+  margin: 5px 0;
+  color: var(--dark-gray);
+  font-size: 1.1rem;
+}
+
+/* New Tab Styles */
+.profile-tabs {
+  display: flex;
+  gap: 10px;
+  border-bottom: 2px solid var(--border-color);
+  margin-bottom: 30px;
+}
+
+.tab-btn {
+  padding: 15px 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--dark-gray);
+  position: relative;
+  bottom: -2px;
+  transition: color 0.3s;
+}
+
+.tab-btn:hover {
+  color: var(--primary-green);
+}
+
+.tab-btn.active {
+  color: var(--primary-green);
+  border-bottom: 3px solid var(--primary-green);
+}
+
+/* Content Styles */
+.tab-content {
+  padding-top: 10px;
+}
+
+.items-category {
+  margin-bottom: 40px;
+}
+
+.items-category h3 {
+  font-size: 1.8rem;
+  color: var(--dark-gray);
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 10px;
+}
+
+/* Transaction History Styles */
+.transaction-history {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.transaction-list h3 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: var(--primary-green);
+}
+
+.transaction-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--white);
+  padding: 15px;
+  border-radius: 5px;
+  border: 1px solid var(--border-color);
+  margin-bottom: 10px;
+}
+
+.transaction-status {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--white);
+  text-transform: capitalize;
+}
+
+/* Status colors */
+.status-pending { background-color: #f57c00; }
+.status-approved { background-color: #388e3c; }
+.status-completed { background-color: #1976d2; }
+.status-rejected, .status-cancelled { background-color: #d32f2f; }
+
+
+.error-message {
+  text-align: center;
+  color: red;
+  font-size: 1.2rem;
+  padding: 20px;
+}
+
+/* Add these styles to the bottom of frontend/src/pages/ProfilePage.css */
+
+.transaction-item {
+  display: flex;
+  flex-direction: column; /* Stack info and actions on smaller screens */
+  gap: 10px;
+  background-color: var(--white);
+  padding: 15px;
+  border-radius: 5px;
+  border: 1px solid var(--border-color);
+  margin-bottom: 10px;
+}
+
+@media (min-width: 768px) {
+  .transaction-item {
+    flex-direction: row; /* Side-by-side on larger screens */
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.tx-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.tx-actions {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0; /* Prevents buttons from shrinking */
+}
+
+.tx-actions button {
+  padding: 6px 12px;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-approve { background-color: #388e3c; }
+.btn-reject { background-color: #d32f2f; }
+.btn-complete { background-color: #1976d2; }
