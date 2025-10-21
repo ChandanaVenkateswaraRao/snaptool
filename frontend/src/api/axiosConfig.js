@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5001/api', // Your backend URL
+  // baseURL: 'https://snaptool-8xz1.onrender.com/api', // Your backend URL
+  baseURL : 'http://localhost:5001/api'
 });
 
 api.interceptors.request.use((config) => {

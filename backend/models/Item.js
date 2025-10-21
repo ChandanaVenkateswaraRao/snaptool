@@ -18,11 +18,12 @@ const itemSchema = new mongoose.Schema({
   // --- THIS IS THE CRITICAL CHANGE ---
   // REMOVE the 'availability' field and ADD the 'status' field.
   // availability: { type: Boolean, default: true }, // <-- REMOVE THIS LINE
-  status: { // <-- ADD THIS ENTIRE BLOCK
-    type: String,
-    enum: ['available', 'rented_out', 'sold'],
-    default: 'available'
-  },
+  // In the itemSchema, update the status enum
+    status: {
+        type: String,
+        enum: ['available', 'rented_out', 'sold', 'unavailable'], // <-- Add 'unavailable'
+        default: 'available'
+    },
 
 }, { timestamps: true });
 

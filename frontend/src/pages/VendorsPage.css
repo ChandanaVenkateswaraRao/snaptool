@@ -1,0 +1,22 @@
+.vendors-header { text-align: center; margin-bottom: 40px; }
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+.category-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none;
+    color: #333;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.category-icon { font-size: 3rem; margin-bottom: 15px; }
+.category-name { font-size: 1.2rem; font-weight: 600; }

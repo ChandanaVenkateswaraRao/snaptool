@@ -5,16 +5,20 @@ const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true, trim: true },
   email: { type: String, required: true, unique: true, trim: true, lowercase: true },
   password: { type: String, required: true },
-  profilePicture: {
-    public_id: { type: String, default: null },
-    url: { type: String, default: 'https://i.imgur.com/6B6XjOA.jpg' },
-  },
-  location: { type: String, trim: true },
+  vendorProfile: { type: mongoose.Schema.Types.ObjectId, ref: 'Vendor' },
+  phoneNumber: { type: String, trim: true, default: '' },
+  profilePicture: { /* ... */ },
+  
+  // --- UPDATED LOCATION TO A SIMPLE STRING ---
+  city: { type: String, required: true, trim: true },
+
   items: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Item' }],
   averageRating: { type: Number, default: 0 },
 }, { timestamps: true });
 
-// Hash password before saving
+// Add 2dsphere index for location-based queries
+userSchema.index({ location: '2dsphere' });
+
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
   const salt = await bcrypt.genSalt(10);
@@ -22,7 +26,6 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-// Method to compare passwords
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };

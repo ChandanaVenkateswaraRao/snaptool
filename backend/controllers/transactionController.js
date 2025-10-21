@@ -1,44 +1,56 @@
-// Create this new file at backend/controllers/transactionController.js
+
 
 const Transaction = require('../models/Transaction');
 const Item = require('../models/Item');
+const crypto = require('crypto');
 
-// @desc    Create a new transaction request
-// @route   POST /api/transactions
-// @access  Private
+
 exports.createTransaction = async (req, res) => {
   try {
     const { itemId } = req.body;
     const requester = req.user._id;
 
+    console.log('[CREATE TX] Starting transaction creation...');
     const item = await Item.findById(itemId);
     if (!item) {
       return res.status(404).json({ message: 'Item not found' });
     }
-
-    // SECURITY CHECK: Ensure the item is available
     if (item.status !== 'available') {
       return res.status(400).json({ message: 'This item is not currently available.' });
     }
-    
-    // SECURITY CHECK: Prevent user from requesting their own item
     if (item.owner.toString() === requester.toString()) {
         return res.status(400).json({ message: 'You cannot rent or buy your own item.' });
     }
 
-    const transaction = new Transaction({
+    // --- LOG #1: Check the generated ID ---
+    const chatRoomId = crypto.randomBytes(16).toString('hex');
+    console.log(`[CREATE TX] Generated chatRoomId: ${chatRoomId}`);
+
+    const transactionData = {
       item: itemId,
       owner: item.owner,
       requester: requester,
       status: 'pending',
-      agreedPrice: item.price // Log the price at the time of request
+      agreedPrice: item.price,
+      chatRoomId: chatRoomId,
+    };
+
+    // --- LOG #2: Check the object right before saving ---
+    console.log('[CREATE TX] Transaction object BEFORE save:', transactionData);
+
+    const transaction = new Transaction(transactionData);
+    const savedTransaction = await transaction.save();
+    
+    // --- LOG #3: Check the object AFTER saving ---
+    console.log('[CREATE TX] Transaction object AFTER save (from DB):', savedTransaction);
+
+    res.status(201).json({ 
+      message: 'Your request has been sent to the owner.',
+      transaction: savedTransaction 
     });
 
-    await transaction.save();
-    res.status(201).json({ message: 'Your request has been sent to the owner.' });
-
   } catch (error) {
-    console.error("TRANSACTION CREATION ERROR:", error);
+    console.error("[CREATE TX] CRITICAL ERROR during transaction creation:", error);
     res.status(500).json({ message: "Server error while creating transaction." });
   }
 };

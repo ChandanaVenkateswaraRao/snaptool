@@ -6,39 +6,51 @@ const cloudinary = require('cloudinary').v2;
 // @desc    Get current user's profile
 // @route   GET /api/users/profile
 // @access  Private
+// In backend/controllers/userController.js
+
 exports.getUserProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user._id).select('-password');
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+    if (!req.user || !req.user._id) {
+      return res.status(401).json({ message: 'Not authorized, user not found.' });
     }
 
-    // 1. Get all items the user is sharing
-    const items = await Item.find({ owner: req.user._id });
+    const user = await User.findById(req.user._id).select('-password').populate('vendorProfile');
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found in database.' });
+    }
 
-    // 2. Get all transactions where the user was the requester (they borrowed/rented/bought)
-    const outgoingTransactions = await Transaction.find({ requester: req.user._id })
-      .populate('item', 'title listingType') // Get item title and type
-      .populate('owner', 'username'); // Get the owner's username
+    const items = await Item.find({ owner: user._id });
 
-    // 3. Get all transactions where the user was the owner (they lent/rented out/sold)
-    const incomingTransactions = await Transaction.find({ owner: req.user._id })
-      .populate('item', 'title listingType') // Get item title and type
-      .populate('requester', 'username'); // Get the requester's username
+    // --- STANDARDIZING QUERIES FOR THE FIX ---
 
-    // 4. Send all the data back to the frontend
+    // Outgoing Transactions (where the user is the requester)
+    const outgoingTransactions = await Transaction.find({ requester: user._id })
+      .select('_id item owner status chatRoomId') // Ensure fields are selected
+      .populate('item', 'title listingType')
+      .populate('owner', 'username');
+
+    // Incoming Transactions (where the user is the owner)
+    const incomingTransactions = await Transaction.find({ owner: user._id })
+      .select('_id item requester status chatRoomId') // Ensure fields are selected
+      .populate('item', 'title listingType')
+      .populate('requester', 'username');
+      
+    console.log('[GET PROFILE] Incoming transactions being sent to frontend:', incomingTransactions);
+    console.log('[GET PROFILE] Outgoing transactions being sent to frontend:', outgoingTransactions);
+
     res.json({
       user,
       items,
-      outgoingTransactions, // History of items you acquired
-      incomingTransactions, // History of items you gave out
+      outgoingTransactions,
+      incomingTransactions,
     });
 
   } catch (error) {
+    console.error("ERROR in getUserProfile:", error);
     res.status(500).json({ message: 'Server Error: ' + error.message });
   }
 };
-
 // @desc    Update user profile
 // @route   PUT /api/users/profile
 // @access  Private
@@ -53,6 +65,7 @@ exports.updateUserProfile = async (req, res) => {
     user.username = req.body.username || user.username;
     user.location = req.body.location || user.location;
 
+    user.phoneNumber = req.body.phoneNumber || user.phoneNumber;
     // Handle profile picture update
     if (req.file) {
       // If user already has a profile picture, delete the old one from Cloudinary
@@ -73,6 +86,7 @@ exports.updateUserProfile = async (req, res) => {
       username: updatedUser.username,
       email: updatedUser.email,
       location: updatedUser.location,
+       phoneNumber: updatedUser.phoneNumber,
       profilePicture: updatedUser.profilePicture,
     });
   } catch (error) {

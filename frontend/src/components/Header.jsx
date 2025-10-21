@@ -16,19 +16,39 @@ const Header = () => {
     <header className="header">
       <div className="header-container">
         <Link to="/" className="logo">ShareHub</Link>
-        <nav className="nav-links">
-        <Link to="/sale" className="nav-link">For sale</Link>
-        <Link to="/rent" className="nav-link">For Rent</Link>
+
+        {/* --- MAIN NAVIGATION (Always Visible) --- */}
+        <nav className="nav-links-main">
+          {/* <Link to="/sale" className="nav-link">For Sale</Link> */}
+          {/* <Link to="/rent" className="nav-link">For Rent</Link> */}
+          {/* <Link to="/vendors" className="nav-link">Vendors</Link>  */}
+        </nav>
+
+        {/* --- AUTHENTICATION NAVIGATION (Changes based on login state) --- */}
+        <nav className="nav-links-auth">
           {user ? (
+            // --- LOGGED-IN VIEW ---
+           
             <>
+              {/* Conditionally render the Vendor Dashboard link */}
+              {user.isVendor && (
+                <Link to="/vendor/dashboard" className="nav-link special">Vendor Dashboard</Link>
+              )}
+
+              <Link to="/vendors" className="nav-link">Vendors</Link> 
+              <Link to="/rent" className="nav-link">For Rent</Link>
+              <Link to="/sale" className="nav-link">For Sale</Link>
               <Link to="/profile" className="nav-link">My Profile</Link>
               <Link to="/create-listing" className="add-item-btn">+ Add Item</Link>
               <button onClick={handleLogout} className="logout-btn">Logout</button>
             </>
           ) : (
+            // --- LOGGED-OUT VIEW ---
             <>
-              <Link to="/login" className="nav-link">Login</Link>
-              <Link to="/register" className="nav-link">Sign Up</Link>
+              <Link to="/login" className="nav-link">User Login</Link>
+              <Link to="/register" className="nav-link special">Sign Up</Link>
+              <Link to="/vendor/login" className="nav-link">Vendor Login</Link>
+              <Link to="/vendor/register" className="nav-link special">Become a Vendor</Link>
             </>
           )}
         </nav>
@@ -36,4 +56,5 @@ const Header = () => {
     </header>
   );
 };
+
 export default Header;

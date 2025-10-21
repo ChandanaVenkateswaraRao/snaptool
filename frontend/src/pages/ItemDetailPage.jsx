@@ -45,6 +45,16 @@ const ItemDetailPage = () => {
     fetchItem();
   }, [id]);
 
+  const handleStatusToggle = async () => {
+        try {
+            const { data } = await api.put(`/items/${id}/status`);
+            // Update the item state locally to reflect the change instantly
+            setItem(prev => ({ ...prev, status: data.status }));
+        } catch (error) {
+            alert("Could not update status.");
+        }
+    };
+
   // --- HANDLER FUNCTIONS ARE NOW CORRECTLY PLACED INSIDE THE COMPONENT ---
   const handleRequest = async () => {
     if (!user) {
@@ -106,7 +116,28 @@ const ItemDetailPage = () => {
             ))}
           </div>
         </div>
-
+        <div className="item-owner-info">
+          <h3>Contact Owner</h3>
+          <p>
+            <strong>Owner:</strong> 
+            {/* --- THIS IS THE NEW LOGIC --- */}
+            {/* Check if the populated owner has a vendorProfile attached */}
+            {item.owner && item.owner.vendorProfile ? (
+              // If yes, link to the vendor page using the vendorProfile's _id
+              <Link to={`/vendor/${item.owner.vendorProfile._id}`}>
+                {item.owner.vendorProfile.businessName}
+              </Link>
+            ) : (
+              // If no, just show the username
+              <span>{item.owner ? item.owner.username : 'Unknown'}</span>
+            )}
+          </p>
+          {/* The rest of the contact info now needs to access the nested user object from the vendor */}
+          <p><strong>Email:</strong> <a href={`mailto:${item.owner?.email}`}>{item.owner?.email}</a></p>
+          {item.owner?.phoneNumber && (
+            <p><strong>Phone:</strong> <a href={`tel:${item.owner.phoneNumber}`}>{item.owner.phoneNumber}</a></p>
+          )}
+        </div>
         {/* Info Panel */}
         <div className="item-info-panel">
           <span className="item-detail-category">{item.category}</span>
@@ -122,10 +153,14 @@ const ItemDetailPage = () => {
           <p className="item-detail-description">{item.description}</p>
           
           <div className="item-actions">
-            {isOwner ? (
+            {user && isOwner ? (
               <div className="owner-actions">
                 <Link to={`/item/edit/${item._id}`} className="btn btn-edit">Edit Listing</Link>
-                <button className="btn btn-delete" onClick={handleDelete}>Delete Listing</button>
+                <button className="btn-delete" onClick={handleDelete}>Delete Listing</button>
+                {/* --- NEW BUTTON --- */}
+                <button className="btn" onClick={handleStatusToggle}>
+                    {item.status === 'available' ? 'Mark as Unavailable' : 'Mark as Available'}
+                </button>
               </div>
             ) : (
               <button 

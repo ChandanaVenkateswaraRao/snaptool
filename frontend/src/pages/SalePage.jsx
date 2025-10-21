@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext  } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import api from '../api/axiosConfig';
 import ItemCard from '../components/ItemCard.jsx';
 import Loader from '../components/Loader';
-import './SalePage.css'; // We will create this new CSS file
+import './SalePage.css';
+import { AuthContext } from '../context/AuthContext';
+import { Link, useNavigate } from 'react-router-dom';
 
 // --- NEW: Dummy coordinates for our major cities. In a real app, this would come from an API or be stored with the item. ---
 const cityCoordinates = {
@@ -15,17 +17,29 @@ const categories = [ 'Electronics', 'Tools', 'Furniture', 'Vehicles', 'Kitchen',
 const indianCities = [ 'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Ahmedabad', 'Chennai', 'Kolkata', 'Surat', 'Pune', 'Jaipur' ];
 
 const SalePage = () => {
+  const { user } = useContext(AuthContext);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({ category: '', location: '' });
 
   useEffect(() => {
+    if (!user || !user.city) {
+        // If user isn't logged in, or has no city, show no items.
+        setItems([]);
+        setLoading(false);
+        return;
+    }
+
     const fetchSaleItems = async () => {
       setLoading(true);
       try {
-        const params = new URLSearchParams({ listingType: 'Sell' });
+        const params = new URLSearchParams({ listingType: 'Sell', city : user.city });
         if (filters.category) params.append('category', filters.category);
-        if (filters.location) params.append('location', filters.location);
+        if (filters.location) {
+            // Note: 'location' filter here might be redundant now, but we can keep it
+            // for more specific searches within a city if needed later.
+            params.set('city', filters.location);
+          }
         
         const { data } = await api.get(`/items?${params.toString()}`);
         setItems(data);
@@ -38,17 +52,26 @@ const SalePage = () => {
 
     const handler = setTimeout(() => fetchSaleItems(), 500);
     return () => clearTimeout(handler);
-  }, [filters]);
+  }, [filters,user]);
 
   const handleFilterChange = (e) => {
     setFilters(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  if (!user) {
+    return (
+        <div className="container">
+            <h1>Items for Sale</h1>
+            <p className="no-items-message">Please <Link to="/login">log in</Link> to see items available in your city.</p>
+        </div>
+    );
+  }
+
   return (
     <div className="container">
       <div className="sale-page-header">
         <h1>Items For Sale</h1>
-        <p>Browse listings from sellers in your community.</p>
+        <p>Showing results for <strong>{user.city}</strong>.</p>
       </div>
 
       <div className="filter-bar">

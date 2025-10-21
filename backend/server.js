@@ -9,9 +9,11 @@ const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const itemRoutes = require('./routes/itemRoutes');
 const userRoutes = require('./routes/userRoutes');
+const vendorRoutes = require('./routes/vendorRoutes');
 const transactionRoutes = require('./routes/transactionRoutes');
-
-
+const Message = require('./models/Message');
+const chatRoutes = require('./routes/chatRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
 // Load env vars
 dotenv.config();
 
@@ -26,30 +28,66 @@ app.use(cors());
 app.use('/api/auth', authRoutes);
 app.use('/api/items', itemRoutes);
 app.use('/api/users', userRoutes); 
+app.use('/api/vendors', vendorRoutes);
 app.use('/api/transactions', transactionRoutes);
+app.use('/api/chat', chatRoutes);
+app.use('/api/reviews', reviewRoutes);
+
 const server = http.createServer(app);
 
 // Socket.IO setup
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000", // Your React app's URL
+    origin: ["http://localhost:5173", "http://localhost:3000"], // Your React app's URL
     methods: ["GET", "POST"]
   }
 });
 
 io.on('connection', (socket) => {
-  console.log(`User connected: ${socket.id}`);
+  console.log(`[Socket.IO] New connection established. Socket ID: ${socket.id}`);
 
-  socket.on('join_chat', (data) => {
-    socket.join(data); // Join a room (e.g., based on transaction ID)
+  socket.on('join_room', (chatRoomId) => {
+    socket.join(chatRoomId);
+    console.log(`[Socket.IO] Socket ${socket.id} successfully joined room: ${chatRoomId}`);
   });
-  
-  socket.on('send_message', (data) => {
-    socket.to(data.room).emit('receive_message', data);
+
+  socket.on('send_message', async (data, callback) => {
+    console.log(`[Socket.IO] Received 'send_message' event with data:`, data);
+    try {
+      const newMessage = new Message({
+        transactionId: data.transactionId,
+        author: data.authorId,
+        message: data.message,
+      });
+      await newMessage.save();
+      console.log(`[Socket.IO] Message saved to DB. ID: ${newMessage._id}`);
+
+      const savedMessage = await Message.findById(newMessage._id).populate('author', 'username');
+
+      const clientsInRoom = io.sockets.adapter.rooms.get(data.room);
+      if (clientsInRoom) {
+        console.log(`[Socket.IO] Clients in room ${data.room}:`, clientsInRoom);
+        console.log(`[Socket.IO] Room size: ${clientsInRoom.size}`);
+      } else {
+        console.log(`[Socket.IO] Room ${data.room} is empty or does not exist.`);
+      }
+      // --- THIS IS THE CORRECTED LINE ---
+      // The correct syntax is socket.broadcast.to(room).emit(...)
+      socket.broadcast.to(data.room).emit('receive_message', savedMessage);
+      
+      console.log(`[Socket.IO] Broadcasted message to room ${data.room} (excluding sender)`);
+
+      if (callback) {
+        callback(savedMessage);
+      }
+
+    } catch (error) {
+      console.error('[Socket.IO] Error in send_message handler:', error);
+    }
   });
 
   socket.on('disconnect', () => {
-    console.log('User disconnected', socket.id);
+    console.log(`[Socket.IO] User disconnected. Socket ID: ${socket.id}`);
   });
 });
 

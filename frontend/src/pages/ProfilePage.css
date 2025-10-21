@@ -170,3 +170,26 @@
 .btn-approve { background-color: #388e3c; }
 .btn-reject { background-color: #d32f2f; }
 .btn-complete { background-color: #1976d2; }
+
+
+/* Add this to the bottom of ProfilePage.css */
+.btn-chat {
+  background-color: #555;
+  padding: 6px 12px;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+/* Add to frontend/src/pages/ProfilePage.css */
+.btn-review {
+  background-color: #ffc107; /* A gold/yellow color */
+  color: #212529;
+  padding: 6px 12px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+}

@@ -1,66 +1,87 @@
+/* In frontend/src/components/Header.css */
 
 .header {
-    background-color: var(--white);
-    padding: 0 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    height: 70px;
-  }
-  
-  .header-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 100%;
-  }
-  
-  .logo {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--primary-green);
-    text-decoration: none;
-  }
-  
-  .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 25px;
-  }
-  
-  .nav-link {
-    text-decoration: none;
-    color: var(--dark-gray);
-    font-weight: 500;
-    transition: color 0.3s;
-  }
-  
-  .nav-link:hover {
-    color: var(--primary-green);
-  }
-  
-  .add-item-btn {
-    background-color: var(--primary-green);
-    color: var(--white);
-    padding: 8px 16px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: background-color 0.3s;
-  }
-  
-  .add-item-btn:hover {
-    background-color: var(--light-green);
-  }
-  
-  .logout-btn {
-    background: none;
-    border: none;
-    color: var(--dark-gray);
-    font-weight: 500;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  .logout-btn:hover {
-    color: var(--primary-green); }
+  background-color: var(--white);
+  padding: 0 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  height: 70px;
+}
+
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between; /* This will push the navs to the sides */
+  align-items: center;
+  height: 100%;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary-green);
+  text-decoration: none;
+  margin-right: 40px; /* Add space between logo and main links */
+}
+
+/* This will group the main navigation links together */
+.nav-links-main {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  flex-grow: 1; /* Allows this section to grow and push the auth links to the right */
+}
+
+/* This will group the authentication links together */
+.nav-links-auth {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+}
+
+.nav-link {
+  text-decoration: none;
+  color: var(--dark-gray);
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-link:hover {
+  color: var(--primary-green);
+}
+
+.add-item-btn {
+  background-color: var(--primary-green);
+  color: var(--white);
+  padding: 8px 16px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+.add-item-btn:hover {
+  background-color: var(--light-green);
+}
+
+.logout-btn {
+  background: none;
+  border: none;
+  color: var(--dark-gray);
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0;
+}
+
+.logout-btn:hover {
+  color: var(--primary-green);
+}
+
+.nav-link.special {
+  background-color: var(--very-light-green);
+  color: var(--primary-green);
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-weight: 600;
+}

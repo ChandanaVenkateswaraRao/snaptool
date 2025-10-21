@@ -31,7 +31,13 @@ const transactionSchema = new mongoose.Schema({
   // The agreed upon price at the time of transaction
   agreedPrice: {
     type: Number
-  }
+  },
+  chatRoomId: { 
+    type: String, 
+    required: true,
+    unique: true
+  },
+
 }, { timestamps: true });
 
 module.exports = mongoose.model('Transaction', transactionSchema);

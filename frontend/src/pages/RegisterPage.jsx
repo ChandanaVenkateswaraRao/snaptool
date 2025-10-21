@@ -2,19 +2,22 @@ import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../api/axiosConfig';
 import { AuthContext } from '../context/AuthContext';
-
+// import useGeolocation from '../hooks/useGeolocation'; 
+const indianCities = [ 'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Ahmedabad', 'Chennai', 'Kolkata', 'Surat', 'Pune', 'Jaipur' ];
 const RegisterPage = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+   const [city, setCity] = useState(indianCities[0]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
+  // const location = useGeolocation(); 
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     if (password.length < 6) {
         setError('Password must be at least 6 characters long.');
         return;
@@ -22,7 +25,7 @@ const RegisterPage = () => {
     setError('');
     setLoading(true);
     try {
-      const { data } = await api.post('/auth/register', { username, email, password });
+      const { data } = await api.post('/auth/register', { username, email, password, city });
       login(data); // Log the user in immediately after successful registration
       navigate('/');
     } catch (err) {
@@ -67,6 +70,15 @@ const RegisterPage = () => {
             required
           />
         </div>
+
+        <div className="form-group">
+          <label htmlFor="city">Your City</label>
+          <select id="city" value={city} onChange={(e) => setCity(e.target.value)}>
+            {indianCities.map(c => <option key={c} value={c}>{c}</option>)}
+          </select>
+        </div>
+
+       
         <button type="submit" className="btn" disabled={loading}>
           {loading ? 'Registering...' : 'Register'}
         </button>
