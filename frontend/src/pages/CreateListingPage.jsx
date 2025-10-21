@@ -4,13 +4,9 @@ import api from '../api/axiosConfig';
 import { AuthContext } from '../context/AuthContext';
 import './CreateListingPage.css';
 
-// --- NEW: Define categories and cities as constants for easy management ---
+// Define categories as a constant
 const categories = [
   'Electronics', 'Tools', 'Furniture', 'Vehicles', 'Kitchen', 'Camera', 'Books', 'Clothing', 'Other'
-];
-
-const indianCities = [
-  'Mumbai', 'Delhi', 'Bangalore', 'Hyderabad', 'Ahmedabad', 'Chennai', 'Kolkata', 'Surat', 'Pune', 'Jaipur'
 ];
 
 const CreateListingPage = () => {
@@ -21,9 +17,9 @@ const CreateListingPage = () => {
     title: '',
     description: '',
     category: categories[0], // Default to the first category
-    listingType: 'Rent', // Default to 'Rent' since 'Borrow' is removed
+    listingType: 'Rent',
     price: '',
-    location: indianCities[0], // Default to the first city
+    // --- REMOVED 'location' from the initial state ---
   });
   const [images, setImages] = useState([]);
   const [error, setError] = useState('');
@@ -50,17 +46,22 @@ const CreateListingPage = () => {
   
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // ... (rest of the submit logic is the same)
     setError('');
     setLoading(true);
     const data = new FormData();
+
+    // Loop through formData and append to FormData object
     Object.keys(formData).forEach(key => data.append(key, formData[key]));
+    
+    // Append images
     for (let i = 0; i < images.length; i++) {
       data.append('images', images[i]);
     }
+
     try {
       await api.post('/items', data, { headers: { 'Content-Type': 'multipart/form-data' } });
-      navigate('/');
+      // Redirect to the user's profile to see their new item
+      navigate('/profile'); 
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to create listing. Please check your inputs.');
     } finally {
@@ -83,7 +84,6 @@ const CreateListingPage = () => {
           <textarea name="description" onChange={handleChange} rows="4" required />
         </div>
 
-        {/* --- UPDATED: Category Dropdown --- */}
         <div className="form-group">
           <label>Category</label>
           <select name="category" value={formData.category} onChange={handleChange}>
@@ -91,15 +91,9 @@ const CreateListingPage = () => {
           </select>
         </div>
 
-        {/* --- UPDATED: Location Dropdown --- */}
-        <div className="form-group">
-          <label>Location</label>
-          <select name="location" value={formData.location} onChange={handleChange}>
-            {indianCities.map(city => <option key={city} value={city}>{city}</option>)}
-          </select>
-        </div>
+        {/* --- REMOVED THE LOCATION DROPDOWN FROM THE FORM --- */}
+        {/* The item's location is now automatically based on the logged-in user's city. */}
         
-        {/* --- UPDATED: Listing Type (Borrow removed) --- */}
         <div className="form-group">
           <label>Listing Type</label>
           <select name="listingType" value={formData.listingType} onChange={handleChange}>

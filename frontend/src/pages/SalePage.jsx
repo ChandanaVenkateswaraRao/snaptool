@@ -94,7 +94,9 @@ const SalePage = () => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           {items.map(item => {
-            const coords = cityCoordinates[item.location];
+            const city = item.owner?.city; 
+            const coords = city ? cityCoordinates[city] : null;
+
             return coords ? (
               <Marker position={coords} key={item._id}>
                 <Popup>

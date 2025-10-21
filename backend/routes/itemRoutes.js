@@ -1,21 +1,32 @@
 const express = require('express');
-const { 
-  createItem, 
-  getItems, 
-  deleteItem, 
+const {
+  createItem,
+  getItems,
   getItemById,
   updateItem,
-  getItemsNearMe ,
-  toggleItemStatus// <-- Import
-} = require('../controllers/itemController');
+  deleteItem,
+  toggleItemStatus
+} = require('../controllers/itemController'); // <-- Only import functions that exist
 const { protect } = require('../middleware/authMiddleware');
 const upload = require('../middleware/uploadMiddleware');
 const router = express.Router();
 
-router.route('/').post(protect, upload.array('images', 5), createItem).get(getItems);
-router.route('/near-me').get(getItemsNearMe); // <-- ADD (must be before '/:id')
+// Route for creating a new item and getting a list of items (with filters)
+// Handles POST /api/items and GET /api/items
+router.route('/')
+  .post(protect, upload.array('images', 5), createItem)
+  .get(getItems);
 
-router.route('/:id').get(getItemById).delete(protect, deleteItem).put(protect, updateItem);
+// Route for getting, updating, and deleting a single item by its ID
+// Handles GET, PUT, and DELETE for /api/items/:id
+router.route('/:id')
+  .get(getItemById)
+  .put(protect, updateItem)
+  .delete(protect, deleteItem);
 
-router.route('/:id/status').put(protect, toggleItemStatus);
+// Route for a vendor to manually toggle an item's availability
+// Handles PUT /api/items/:id/status
+router.route('/:id/status')
+  .put(protect, toggleItemStatus);
+
 module.exports = router;
