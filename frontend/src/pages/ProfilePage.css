@@ -193,3 +193,55 @@
   cursor: pointer;
   font-weight: 600;
 }
+
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  background-color: var(--surface-color);
+  padding: 30px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  margin-bottom: 40px;
+}
+.profile-picture {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--primary-green);
+}
+.profile-info h1 { margin: 0 0 10px; font-size: 2.5rem; }
+.profile-info p { margin: 5px 0; color: var(--text-secondary); font-size: 1.1rem; }
+.edit-profile-btn, .vendor-btn { margin-top: 15px; display: inline-block; }
+
+.profile-tabs {
+  display: flex;
+  gap: 10px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 30px;
+}
+.tab-btn {
+  padding: 15px 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-secondary);
+  border-bottom: 3px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+.tab-btn:hover { color: var(--text-primary); }
+.tab-btn.active {
+  color: var(--primary-green);
+  border-bottom-color: var(--primary-green);
+}
+
+.transaction-item {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    /* ... other styles are likely fine ... */
+}
+/* ... */

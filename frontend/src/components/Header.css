@@ -1,87 +1,63 @@
-/* In frontend/src/components/Header.css */
-
 .header {
-  background-color: var(--white);
+  background-color: var(--surface-color);
   padding: 0 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid var(--border-color);
   height: 70px;
+  position: sticky;
+  top: 0;
+  z-index: 500;
 }
-
 .header-container {
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
-  justify-content: space-between; /* This will push the navs to the sides */
+  justify-content: space-between;
   align-items: center;
   height: 100%;
 }
-
 .logo {
   font-size: 24px;
   font-weight: 700;
   color: var(--primary-green);
   text-decoration: none;
-  margin-right: 40px; /* Add space between logo and main links */
 }
-
-/* This will group the main navigation links together */
-.nav-links-main {
-  display: flex;
-  align-items: center;
-  gap: 25px;
-  flex-grow: 1; /* Allows this section to grow and push the auth links to the right */
-}
-
-/* This will group the authentication links together */
-.nav-links-auth {
+.nav-links-main, .nav-links-auth {
   display: flex;
   align-items: center;
   gap: 25px;
 }
-
+.nav-links-main { flex-grow: 1; margin-left: 40px; }
 .nav-link {
   text-decoration: none;
-  color: var(--dark-gray);
-  font-weight: 500;
-  transition: color 0.3s;
+  color: var(--text-secondary);
+  font-weight: 600;
+  position: relative;
+  padding: 5px 0;
 }
-
-.nav-link:hover {
-  color: var(--primary-green);
-}
-
-.add-item-btn {
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
   background-color: var(--primary-green);
-  color: var(--white);
-  padding: 8px 16px;
-  border-radius: 5px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: background-color 0.3s;
+  transition: width 0.3s ease;
 }
-
-.add-item-btn:hover {
-  background-color: var(--light-green);
+.nav-link:hover::after {
+  width: 100%;
 }
-
-.logout-btn {
-  background: none;
-  border: none;
-  color: var(--dark-gray);
-  font-weight: 500;
-  cursor: pointer;
-  font-size: 16px;
-  padding: 0;
-}
-
-.logout-btn:hover {
-  color: var(--primary-green);
-}
-
+.nav-link:hover { color: var(--text-primary); }
 .nav-link.special {
-  background-color: var(--very-light-green);
-  color: var(--primary-green);
-  padding: 6px 12px;
-  border-radius: 5px;
+  background-color: var(--primary-green);
+  color: var(--text-on-primary);
+  padding: 8px 16px;
+  border-radius: var(--border-radius);
   font-weight: 600;
+  transition: background-color 0.2s ease;
 }
+.nav-link.special:hover { color: var(--text-on-primary); background-color: var(--primary-green-dark); }
+.nav-link.special::after { display: none; }
+.add-item-btn { /* Your existing btn styles will mostly cover this */ }
+.logout-btn { background: none; border: none; font-size: 1rem; cursor: pointer; color: var(--text-secondary); font-weight: 600; }
+.logout-btn:hover { color: var(--primary-green); }

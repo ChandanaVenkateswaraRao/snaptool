@@ -1,43 +1,138 @@
+/* --- Root Overlay and Animations --- */
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.5); /* Darker overlay for contrast */
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  overflow: hidden; /* Important for the 3D scene */
+  animation: fadeInOverlay 0.5s ease-out;
 }
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* --- The "Frosted Glass" Chat Modal --- */
 .chat-modal {
-  width: 400px;
-  height: 500px;
-  background-color: white;
-  border-radius: 8px;
+  width: 420px;
+  height: 600px;
+  /* --- The Frosted Glass Effect --- */
+  background-color: rgba(255, 255, 255, 0.1); /* Very transparent */
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  /* --- End Effect --- */
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  animation: zoomInModal 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+
+@keyframes zoomInModal {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* --- Header and Footer --- */
 .chat-header {
-  padding: 10px;
-  background-color: var(--primary-green);
-  color: white;
+  padding: 15px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: var(--text-on-primary);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
-.close-btn { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
-.chat-body { flex-grow: 1; padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-.message-container { display: flex; flex-direction: column; }
-.message-content { padding: 8px 12px; border-radius: 10px; max-width: 80%; }
-.message-meta { font-size: 0.7rem; color: #888; margin-top: 2px; }
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--text-on-primary);
+  font-size: 1.8rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.close-btn:hover { transform: rotate(90deg); }
+
+/* --- Chat Body and Messages --- */
+.chat-body {
+  flex-grow: 1;
+  padding: 15px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.message-container {
+  display: flex;
+  flex-direction: column;
+  animation: popInMessage 0.3s ease-out;
+}
+@keyframes popInMessage {
+  from { transform: scale(0.9); opacity: 0.5; }
+  to { transform: scale(1); opacity: 1; }
+}
+.message-content {
+  padding: 10px 15px;
+  border-radius: 18px;
+  max-width: 80%;
+  line-height: 1.4;
+  color: var(--text-primary);
+}
+.message-meta {
+  font-size: 0.75rem;
+  color: #eee; /* Lighter color for better readability on glass */
+  margin-top: 4px;
+  padding: 0 5px;
+}
+
 .message-container.sent { align-items: flex-end; }
-.message-container.sent .message-content { background-color: var(--primary-green); color: white; }
+.message-container.sent .message-content {
+  background-color: var(--primary-green);
+  color: var(--text-on-primary);
+  border-bottom-right-radius: 5px;
+}
+.message-container.sent .message-meta { text-align: right; }
+
 .message-container.received { align-items: flex-start; }
-.message-container.received .message-content { background-color: #f0f0f0; }
-.chat-footer { display: flex; padding: 10px; border-top: 1px solid var(--border-color); }
-.chat-footer input { flex-grow: 1; border: 1px solid #ccc; padding: 8px; border-radius: 5px; }
-.chat-footer button { margin-left: 10px; padding: 8px 15px; border: none; background-color: var(--primary-green); color: white; border-radius: 5px; cursor: pointer; }
+.message-container.received .message-content {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-bottom-left-radius: 5px;
+}
+
+/* --- Chat Footer Input --- */
+.chat-footer {
+  display: flex;
+  padding: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+.chat-footer input {
+  flex-grow: 1;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 12px;
+  border-radius: 20px;
+  color: white;
+  outline: none;
+}
+.chat-footer input::placeholder { color: #ccc; }
+.chat-footer button {
+  margin-left: 10px;
+  padding: 0 20px;
+  border: none;
+  background-color: var(--primary-green);
+  color: white;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+.chat-footer button:hover { background-color: var(--primary-green-dark); }

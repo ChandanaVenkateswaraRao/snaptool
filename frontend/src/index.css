@@ -1,20 +1,182 @@
-body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-      sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    background-color: #f4f7f6;
-    color: #333;
-  }
+/* === SHAREHUB GLOBAL STYLES === */
+
+/* 1. CSS Variables (The Core of the Theme) */
+:root {
+  --primary-green: #10B981; /* A modern, vibrant green */
+  --primary-green-dark: #059669;
+  --secondary-yellow: #FBBF24;
+  --secondary-yellow-dark: #F59E0B;
   
-  :root {
-    --primary-green: #2e7d32;
-    --light-green: #4caf50;
-    --very-light-green: #e8f5e9;
-    --white: #ffffff;
-    --gray: #f4f4f4;
-    --dark-gray: #555;
-    --border-color: #ddd;
-  }
+  --bg-color: #F9FAFB;      /* Very light gray for the page background */
+  --surface-color: #FFFFFF; /* White for cards, modals, etc. */
+  
+  --text-primary: #1F2937;   /* Dark gray for main text */
+  --text-secondary: #6B7280; /* Lighter gray for subtitles, meta text */
+  --text-on-primary: #FFFFFF; /* White text on green backgrounds */
+  
+  --border-color: #E5E7EB;   /* Light gray for borders and dividers */
+  --danger-color: #EF4444;
+  
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  
+  --border-radius: 8px;
+}
+
+/* 2. Global Resets & Typography */
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+a {
+  color: var(--primary-green);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+a:hover {
+  color: var(--primary-green-dark);
+}
+
+/* 3. Main Layout Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* 4. Universal Button Styles */
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border: none;
+  border-radius: var(--border-radius);
+  background-color: var(--primary-green);
+  color: var(--text-on-primary);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+  background-color: var(--primary-green-dark);
+  transform: translateY(-2px);
+}
+
+.btn:disabled {
+  background-color: #9CA3AF;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Button Variants */
+.btn-secondary {
+  background-color: var(--surface-color);
+  color: var(--primary-green);
+  border: 1px solid var(--primary-green);
+}
+.btn-secondary:hover {
+  background-color: #F3F4F6;
+}
+
+.btn-danger {
+  background-color: var(--danger-color);
+}
+.btn-danger:hover {
+  background-color: #DC2626;
+}
+
+/* 5. Universal Form Styles */
+.form-container {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 40px;
+  background: var(--surface-color);
+  box-shadow: var(--shadow-lg);
+  border-radius: var(--border-radius);
+}
+.form-group {
+  margin-bottom: 20px;
+}
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  box-sizing: border-box;
+  background-color: var(--bg-color);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+/* 6. Universal Item Card Style */
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+}
+.item-card {
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.item-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+.item-card-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  background-color: #f3f3f3;
+}
+.item-card-content {
+  padding: 15px;
+}
+.item-card-title {
+  font-size: 1.1rem;
+  margin: 5px 0;
+  font-weight: 600;
+}
+.item-card-price {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--primary-green);
+}
+/* ... other card styles will inherit from here ... */

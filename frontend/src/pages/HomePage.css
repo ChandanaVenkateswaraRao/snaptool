@@ -1,47 +1,31 @@
-/* Replace all code in frontend/src/pages/HomePage.css with this */
-
 .hero-section {
-  background-color: var(--primary-green);
-  color: var(--white);
-  padding: 80px 0;
+  padding: 100px 0;
   text-align: center;
+  background: linear-gradient(rgba(16, 185, 129, 0.8), rgba(5, 150, 105, 0.9)), 
+              url('https://images.unsplash.com/photo-1616047006789-b7af5afb8c20?q=80&w=2080') no-repeat center center;
+  background-size: cover;
+  color: var(--text-on-primary);
 }
-
+.hero-section h1 {
+  font-size: 3.5rem;
+  color: var(--text-on-primary);
+  margin-bottom: 1rem;
+}
 .hero-tagline {
   font-size: 1.25rem;
   max-width: 600px;
-  margin: 20px auto 30px;
-  line-height: 1.6;
+  margin: 0 auto 40px;
+  color: rgba(255, 255, 255, 0.9);
 }
-
-.hero-btn {
-  background-color: var(--white);
-  color: var(--primary-green);
-  padding: 12px 25px;
-  font-size: 1rem;
-  font-weight: 700;
-  text-decoration: none;
-  border-radius: 5px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.hero-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-}
+.hero-buttons { display: flex; justify-content: center; gap: 20px; }
+.hero-btn { /* Your global button styles will handle this */ }
+.hero-btn.secondary { background-color: transparent; border: 2px solid var(--text-on-primary); }
+.hero-btn.secondary:hover { background-color: rgba(255, 255, 255, 0.1); }
 
 .section-title {
   text-align: center;
-  font-size: 2.2rem;
-  margin-top: 50px;
-  margin-bottom: 40px;
-  color: var(--dark-gray);
+  font-size: 2.5rem;
+  margin-top: 80px;
+  margin-bottom: 50px;
 }
-
-/* items-grid is a reusable class you likely already have */
-.items-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 25px;
-  padding-bottom: 50px;
-}
+/* ... rest of your HomePage styles will inherit nicely ... */

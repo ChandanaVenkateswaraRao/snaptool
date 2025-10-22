@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import api from '../api/axiosConfig';
+import AnimatedBg from './AnimatedBg.jsx';
 import './ChatModal.css';
 
 const ChatModal = ({ socket, user, chatRoomId, transactionId, onClose }) => {
@@ -68,6 +69,7 @@ const ChatModal = ({ socket, user, chatRoomId, transactionId, onClose }) => {
   // ... (The JSX part of the component is the same as the last version)
   return (
     <div className="modal-overlay" onClick={onClose}>
+      <AnimatedBg />
       <div className="chat-modal" onClick={(e) => e.stopPropagation()}>
         <div className="chat-header">
            {/* ... header ... */}
